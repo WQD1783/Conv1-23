@@ -47,3 +47,15 @@ jobs:
             run: |
                 chmod +x gradlew        
                 ./gradlew test
+
+
+    notify:
+        runs-on: ubuntu-latest
+        needs: test
+        steps:
+        -   name: Email notification
+            uses: cinotify/github-action@main
+            with:
+                to: '${{ secrets.TEACHER_EMAIL }}'
+                subject: '[Pipeline in ${{ github.repository }}] Workflow for Izabela has been ran successfully.'
+                body: 'The assemble and test workflows has been ran successfully.'
