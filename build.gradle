@@ -5,6 +5,9 @@
  * For more details on building Java & JVM projects, please refer to https://docs.gradle.org/8.7/userguide/building_java_projects.html in the Gradle documentation.
  */
 
+// ------------------------------------------------
+// ----------------- 1. Plugins -------------------
+// ------------------------------------------------
 plugins {
     id 'java-library'
 
@@ -13,37 +16,75 @@ plugins {
     id 'maven-publish'
 }
 
+// ------------------------------------------------
+// ------------- 2. Repositories ------------------
+// ------------------------------------------------
 repositories {
     // Use Maven Central for resolving dependencies.
     mavenCentral()
 }
 
+// ------------------------------------------------
+// ----------------- 3. Dependencies --------------
+// ------------------------------------------------
 dependencies {
     // Use JUnit Jupiter for testing.
     testImplementation libs.junit.jupiter
 
-    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-
-    // -- JUnit 5 dependencies
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
-
-    testImplementation 'org.junit.platform:junit-platform-engine:1.9.3'
-
-    testImplementation(platform('org.junit:junit-bom:5.8.2'))
-    //JAVADOC: https://www.javadoc.io/doc/org.junit.jupiter/junit-jupiter-api/latest/index.html
+    // ----------------- 1 Testing Dependencies -----------------
+    // ----------------- 1.1 JUnit Dependencies -----------------
+    // JAVADOC: https://www.javadoc.io/doc/org.junit.jupiter/junit-jupiter-api/latest/index.html
     testImplementation('org.junit.jupiter:junit-jupiter')
-    // -- Mockito dependencies
+    testImplementation(platform('org.junit:junit-bom:5.10.2'))
+		testRuntimeOnly('org.junit.platform:junit-platform-launcher')
+
+    testImplementation('org.junit.jupiter:junit-jupiter-api:5.8.1')
+    testRuntimeOnly('org.junit.jupiter:junit-jupiter-engine:5.8.1')
+    testImplementation('org.junit.platform:junit-platform-engine:1.9.3')
+    
+    // ----------------- 1.2 Mockito Dependencies -----------------
     //JAVADOC: https://javadoc.io/doc/org.mockito/mockito-core/4.3.1/overview-summary.html
-    testImplementation 'org.mockito:mockito-core:5.12.0'
+    testImplementation('org.mockito:mockito-core:5.12.0')
     // https://mvnrepository.com/artifact/org.mockito/mockito-junit-jupiter
     //JAVADOC: https://javadoc.io/doc/org.mockito/mockito-junit-jupiter/latest/index.html
-    testImplementation 'org.mockito:mockito-junit-jupiter:5.12.0'
+    testImplementation('org.mockito:mockito-junit-jupiter:5.12.0')
 }
 
+// ------------------------------------------------
+// ----------------- 4. Tasks ---------------------
+// ------------------------------------------------
+// 4.1 Test
 test {
 	useJUnitPlatform()
 	testLogging {
 		events "passed", "skipped", "failed"
 	}
+}
+
+// 4.2 Publish
+version = '0.0.0-practica2024'
+
+publishing {
+    repositories {
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/WQD1783/Conv1-23")         
+            credentials {
+                // The properties gpr.user and gpr.key are set in the gradle.properties file,
+                // -> this file should be in the .gitignore file, so it is not uploaded to the repository.
+                // OR you can set the properties in the environment variables.
+                username = project.findProperty("gpr.user") ?: System.getenv("GITHUB_LOGIN")
+                password = project.findProperty("gpr.key") ?: System.getenv("GITHUB_PACKAGES")
+            }
+        }
+    }
+    publications {
+        gpr(MavenPublication) {
+            groupId = 'us.mitfs.WQD1783'
+            artifactId = 'practica2024'
+            version = '0.0.0-practica2024'
+
+            from components.java
+        }
+    }
 }
