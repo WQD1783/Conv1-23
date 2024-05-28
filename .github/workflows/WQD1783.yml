@@ -1,4 +1,4 @@
-name: <Her skriver du navnet på selve workflowen>
+name: CI Pipeline (Build and test)
 on:
   workflow_dispatch:
   pull_request: 
