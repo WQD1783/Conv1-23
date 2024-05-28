@@ -217,16 +217,24 @@ class EstadisticasAlumnoTest {
 	@Test
 	void testObtenerDiferenciaMediaClase() {
 		//Configurar comportamiento del MOCK
-		
+		alumnoDAO = Mockito.mock(AlumnoDAO.class);
+		Mockito.when(alumnoDAO.getAlumnoByUvus(Mockito.anyString())).thenReturn(alumno1);
+		Mockito.when(alumnoDAO.getAlumnosByClase(Mockito.anyString())).thenReturn(alumnos);
 	
 		// Crear instancia de EstadisticasAlumno con el mock de AlumnoDAO
+		EstadisticasAlumno forTest = new EstadisticasAlumno(alumnoDAO);
 		
 		//Invocar métdo a probar
-
-		
+		double diferencia = forTest.obtenerDiferenciaMediaClase(alumno1.getUvus());
 
 		//Escribir verificaciones
+		Mockito.verify(alumnoDAO).getAlumnoByUvus(uvusCaptor.capture());
+		Mockito.verify(alumnoDAO).getAlumnosByClase(claseCaptor.capture());
+
+		Assertions.assertEquals(0.06, diferencia, "The difference is not as expected");
 	}
+
+
 
 	/**
 	 * Test method for
@@ -235,15 +243,32 @@ class EstadisticasAlumnoTest {
 	@Test
 	void testObtenerCuartilPorClase() {
 		//Configurar comportamiento del MOCK
+		alumnoDAO = Mockito.mock(AlumnoDAO.class); //Det samme hver gang, endre navn på variabel
+
+		//getAlumnoByUvus, returning for any string
+		Mockito.when(alumnoDAO.getAlumnoByUvus(Mockito.anyString())).thenReturn(alumno1);
+		
+		//getAlumnosByClase
+		Mockito.when(alumnoDAO.getAlumnosByClase(Mockito.anyString())).thenReturn(alumnos);
 		
 	
+
 		// Crear instancia de EstadisticasAlumno con el mock de AlumnoDAO
+		EstadisticasAlumno underTest = new EstadisticasAlumno(alumnoDAO); //Det samme hver gang, endre navn på variabel
 		
-		//Invocar métdo a probar
-		
+		//Invocar método a probar
+		int cuartil = underTest.obtenerCuartilPorClase(alumno1.getUvus());
 
 		//Escribir verificaciones
-		
+		Mockito.verify(alumnoDAO).getAlumnoByUvus(uvusCaptor.capture());
+		Mockito.verify(alumnoDAO).getAlumnosByClase(claseCaptor.capture());
+
+		assertEquals("uvus01", uvusCaptor.getValue(), "The UVUS is not as expected");
+		assertEquals("clase", claseCaptor.getValue(), "The class is not as expected");
+
+		//The task has stated that the quartile should be 3
+		Assertions.assertEquals(3, cuartil, "The quartile is not as expected");
+
 	}
 
 }
