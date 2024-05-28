@@ -222,6 +222,8 @@ class EstadisticasAlumnoTest {
 		// Crear instancia de EstadisticasAlumno con el mock de AlumnoDAO
 		
 		//Invocar métdo a probar
+
+		Assertions.fail("Lagt inn feil i testen");
 		
 
 		//Escribir verificaciones
