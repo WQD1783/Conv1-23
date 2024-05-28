@@ -107,6 +107,7 @@ class EstadisticasAlumnoTest {
 	@Test
 	void testEstadisticasAlumno() {
 		//Configurar comportamiento del MOCK
+
 		
 	
 		// Crear instancia de EstadisticasAlumno con el mock de AlumnoDAO
@@ -129,6 +130,7 @@ class EstadisticasAlumnoTest {
 		// Crear instancia de EstadisticasAlumno con el mock de AlumnoDAO
 		
 		//Invocar métdo a probar
+
 		
 
 		//Escribir verificaciones
