@@ -223,7 +223,6 @@ class EstadisticasAlumnoTest {
 		
 		//Invocar métdo a probar
 
-		Assertions.fail("Lagt inn feil i testen");
 		
 
 		//Escribir verificaciones
